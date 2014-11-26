@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>OpenTok on WebRTC Simple Example</title>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <script src="//static.opentok.com/webrtc/v2.0/js/opentok.min.js" type="text/javascript" charset="utf-8"></script>
+        <!-- link href="<% build.static_opentok_url %>/css/demos.css" type="text/css" rel="stylesheet" -->
+        <script type="text/javascript" charset="utf-8">
+			
+			var API_KEY, SESSION_ID, SESSION_TOKEN;
+			
+			var queryStr = window.location.search;
+			if(/^\?/igm.test(queryStr)){
+				queryStr = queryStr.substring(1);
+			}
+			var params = queryStr.split('&');
+		
+			(function(){
+				if(!queryStr || queryStr.length < 1){
+					return;
+				}
+				
+				var params = queryStr.split('&');
+				
+				for(var i=0, size = params.length; i < size; ++i){
+					var index = params[i].indexOf('=');
+					if(index !== -1){
+						var name = params[i].substring(0,index);
+						var value = params[i].substring(index+1);
+						
+						if(name === 'apiKey'){
+							API_KEY = value;
+						}
+						else if(name === 'sessionId'){
+							SESSION_ID = value;
+						}
+						else if(name === 'sessionToken'){
+							SESSION_TOKEN = value;
+						}
+						else {
+							console.error('unknown query-param: '+params[i]);
+						}
+					}
+					else {
+						console.error('could not find value for query-param: '+params[i]);
+					}
+				}
+			})();
+			
+		
+            TB.addEventListener("exception", exceptionHandler);
+            var session = TB.initSession(SESSION_ID); // Replace with your own session ID. See https://dashboard.tokbox.com/projects
+            TB.setLogLevel(TB.DEBUG);
+            session.addEventListener("sessionConnected", sessionConnectedHandler);
+            session.addEventListener("streamCreated", streamCreatedHandler);
+            session.connect(API_KEY, SESSION_TOKEN); // Replace with your API key and token. See https://dashboard.tokbox.com/projects
+
+            function sessionConnectedHandler(event) {
+                 console.log("connected");
+                 subscribeToStreams(event.streams);
+                 session.publish();
+            }
+
+            function streamCreatedHandler(event) {
+                console.log("created");
+                subscribeToStreams(event.streams);
+            }
+
+            function subscribeToStreams(streams) {
+                for (var i = 0; i < streams.length; i++) {
+                    var stream = streams[i];
+                    if (stream.connection.connectionId != session.connection.connectionId) {
+                        session.subscribe(stream);
+                    }
+                }
+            }
+
+            function exceptionHandler(event) {
+                alert(event.message);
+            }
+
+
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

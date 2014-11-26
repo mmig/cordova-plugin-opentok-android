@@ -44,8 +44,14 @@ Android App
 Web Page
 --
 
-1. publish the HTML page demo/webpage/helloWorld.html
-  * ensure that the published web page is available with a public IP
-2. open the web page and use query-parameters to set the OpenTok API-key, session-ID and token:
+1. publish the HTML pages
+     demo/webpage/helloWorld.html
+   and
+     demo/webpage/helloWorldIframe.html
+   (both pages should be placed in the same path)
+   
+ * ensure that the published web pages are available with a public IP
+  
+2. open the web page helloWorld.html in a browser and use query-parameters to set the OpenTok API-key, session-ID and token:
    .../helloWorld.html?apiKey=xx...xx&sessionId=xxx...xxx&sessionToken=xxx...xxx
    (use the same values as for the Android app)
