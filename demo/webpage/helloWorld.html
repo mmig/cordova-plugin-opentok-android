@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>OpenTok on WebRTC JavaScript Hello World Tutorial</title>
+	<link href="/css/demos.css" type="text/css" rel="stylesheet" >
+	<script src="http://static.opentok.com/v1.1/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		
+		//TODO example values: 
+		//  either
+		//		1) replace API_KEY, SESSION_ID, and SESSION_TOKEN with your generated values!
+		//  or
+		//		2) use query-parameters in URL to set the session ID, token etc.
+		//		   (see note on page)
+		//
+//		var API_KEY 		// Replace with your apiKey.
+//		var SESSION_ID		// Replace with your own session ID. Make sure it matches helloWorld.html
+//		var SESSION_TOKEN	// for generating Session IDs and Tokens, See https://dashboard.tokbox.com/projects
+
+		var API_KEY = "xxxxxxxx";
+		var SESSION_ID = "1_MXxxxxxxxxxxxxx-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-xxx";
+		var SESSION_TOKEN = "X1==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==";
+
+		///////////////// extract session data from query-string (if present): //////////////
+		var queryStr = window.location.search;
+		if(/^\?/igm.test(queryStr)){
+			queryStr = queryStr.substring(1);
+		}
+		var params = queryStr.split('&');
+		
+		(function(){
+			if(!queryStr || queryStr.length < 1){
+				return;
+			}
+			
+			var params = queryStr.split('&');
+			
+			for(var i=0, size = params.length; i < size; ++i){
+				var index = params[i].indexOf('=');
+				if(index !== -1){
+					var name = params[i].substring(0,index);
+					var value = params[i].substring(index+1);
+					
+					if(name === 'apiKey'){
+						API_KEY = value;
+					}
+					else if(name === 'sessionId'){
+						SESSION_ID = value;
+					}
+					else if(name === 'sessionToken'){
+						SESSION_TOKEN = value;
+					}
+					else {
+						console.error('unknown query-param: '+params[i]);
+					}
+				}
+				else {
+					console.error('could not find value for query-param: '+params[i]);
+				}
+			}
+		})();
+		///////////////////////////////////
+			
+		
+		session_id = SESSION_ID;
+		token = SESSION_TOKEN;
+		api_key = parseInt(API_KEY,10);
+		
+		var QUERY_DATA = 'sessionId=' + SESSION_ID + '&sessionToken=' + SESSION_TOKEN + '&apiKey=' + API_KEY;
+		
+	</script>
+</head>
+<body>
+<!--
+<% title = "OpenTok on WebRTC JavaScript Hello World Tutorial" %>
+<% locals.meta_html({ 'http-equiv': 'X-UA-Compatible', content: 'chrome=1'}); %>
+-->
+	
+<h1>OpenTok on WebRTC JavaScript Tutorial &#151; Hello World</h1>
+
+<p>This tutorial shows how to use the OpenTok on WebRTC JavaScript library to connect to an OpenTok session, display any existing streams and publish a video stream to the session. Although this is not a traditional "hello world" sample, it does show the most basic application to use the most basic OpenTok functionality.</p>
+
+<ul>
+	<li><a href="index.html">Go back to the tutorial</a></li>
+</ul>
+
+<h2>Testing the tutorial online</h2>
+
+<p>To run the tutorial at the top of this page:</p>
+
+
+<p>
+Set session data by URL query, example:
+<br>
+<hr><i>
+[url]?<strong>apiKey=</strong>xxxxxxxx<strong>&sessionId=</strong>1_MXxxxxxxxxxxxxx-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-xxx<strong>&sessionToken=</strong>X1==xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+</i>
+<hr>
+</p>
+
+<ol>
+
+<li>Be sure to open this page in Chrome 23+ or Firefox 21+. Currently, the OpenTok on WebRTC JavaScript library is only
+supported in those browsers.</li>
+
+<li>Make sure that you have a webcam connected to your computer and configured to run.</li>
+
+<li>At the top of the browser, a message indicates that the web page wants to use your camera and microphone.
+Click the <strong>Allow</strong> button.</li>
+
+<p>The example now connects to a sample OpenTok session, displays your video at the bottom of this page, and
+publishes your video to the session. It also displays any other video streams in the session (if there are any).</p>
+
+<li>Mute the speaker on your computer. (For this test app, this will prevent audio feedback.)</li>
+
+<!--
+<li>Open <a id="session-link" href="demo.html?sessionId=" target="<%= ot.session_id %>">this link</a>
+in a new browser window.</li>
+-->
+<script type="text/javascript" charset="utf-8">
+	document.write('<' + 'li>Open <' + 'a id="session-link" href="demo.html?' + QUERY_DATA + '" target="'+ SESSION_ID +'">this link<' + '/a> in a new browser window.<' + '/li>');
+</script>
+
+<p>This URL connects to the same OpenTok session used by this page.</p>
+
+<p>The new page now connects to the session. Upon connection the video stream
+from the other page is displayed on the page and the new published video stream
+appears on both pages.</p>
+
+<p>You can open the link on another computer (as would happen in a real session.)</p>
+
+<p>You can wave to the camera and say "hello world."</p>
+
+</ol>
+
+<h2>Demo</h2>
+
+<script src="http://static.opentok.com/v1.1/js/TB.min.js"></script>
+<script>
+	if (!TB.checkSystemRequirements()) {
+		TB.upgradeSystemRequirements();
+	}
+</script>
+
+<!--
+<iframe id="session-iframe" src ="iframe.html?sessionId=" width="100%" height="300" class="tutorial"></iframe>
+-->
+<script type="text/javascript" charset="utf-8">
+	document.write('<' + 'iframe id="session-iframe" src ="iframe.html?' + QUERY_DATA + '" width="100%" height="600" class="tutorial"><' + '/iframe>');
+</script>
+
+</body>
+</html>
